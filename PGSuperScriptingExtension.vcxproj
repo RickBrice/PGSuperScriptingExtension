@@ -70,7 +70,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(PYTHONDIR)\include;\scintilla\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ARPDIR)\BridgeLink\Include;$(PYTHONDIR)\include;\scintilla\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;_ATL_NO_UUIDOF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -83,6 +83,7 @@
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <ModuleDefinitionFile>.\PGSuperScriptingExtension.def</ModuleDefinitionFile>
@@ -112,7 +113,7 @@
       <DllDataFileName />
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(PYTHONDIR)\include;\scintilla\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ARPDIR)\BridgeLink\Include;$(PYTHONDIR)\include;\scintilla\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;xWBFL_MODERNIZATION;NDEBUG;_USRDLL;_ATL_NO_UUIDOF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -125,6 +126,7 @@
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <ModuleDefinitionFile>.\PGSuperScriptingExtension.def</ModuleDefinitionFile>

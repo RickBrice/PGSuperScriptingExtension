@@ -7,11 +7,6 @@
 
 #include "resource.h"
 
-#include "PyEditorDocTemplate.h"
-#include "PyEditorDoc.h"
-#include "PyEditorFrame.h"
-#include "PyEditorView.h"
-
 #include <initguid.h>
 #include "dllmain.h"
 #include <WBFLCore_i.c>
@@ -23,7 +18,15 @@
 #include <IGraphManager.h>
 #include <IFace\Selection.h>
 #include <IFace\AnalysisResults.h>
+#include <IFace\Bridge.h>
 #include "Scripting.h"
+
+
+#include "PyEditorDocTemplate.h"
+#include "PyEditorDoc.h"
+#include "PyEditorFrame.h"
+#include "PyEditorView.h"
+
 
 #include "Bindings.h"
 

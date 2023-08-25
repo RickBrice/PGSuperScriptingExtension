@@ -147,9 +147,9 @@ BOOST_PYTHON_MODULE(BridgeLink)
       ;
 
 
-   enum_<enumExposureCondition>("ExposureCondition")
-      .value("Normal", expNormal)
-      .value("Severe", expSevere)
+   enum_< pgsTypes::ExposureCondition>("ExposureCondition")
+      .value("Normal", pgsTypes::ExposureCondition::Normal)
+      .value("Severe", pgsTypes::ExposureCondition::Severe)
       ;
 
    class_<CPyEnvironment>("Environment")

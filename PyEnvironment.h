@@ -8,8 +8,8 @@ public:
    void Init(IBroker* pBroker);
    void Reset();
 
-   enumExposureCondition GetExposureCondition() const;
-   void SetExposureCondition(enumExposureCondition newVal);
+   pgsTypes::ExposureCondition GetExposureCondition() const;
+   void SetExposureCondition(pgsTypes::ExposureCondition newVal);
    Float64 GetRelHumidity() const;
    void SetRelHumidity(Float64 newVal);
 

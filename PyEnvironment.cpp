@@ -17,12 +17,12 @@ void CPyEnvironment::Reset()
    m_pEnvironment.Release();
 }
 
-enumExposureCondition CPyEnvironment::GetExposureCondition() const
+pgsTypes::ExposureCondition CPyEnvironment::GetExposureCondition() const
 {
    return m_pEnvironment->GetExposureCondition();
 }
 
-void CPyEnvironment::SetExposureCondition(enumExposureCondition newVal)
+void CPyEnvironment::SetExposureCondition(pgsTypes::ExposureCondition newVal)
 {
    m_pEnvironment->SetExposureCondition(newVal);
 }

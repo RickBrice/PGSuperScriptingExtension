@@ -8,8 +8,8 @@ public:
    void Init(IBroker* pBroker);
    void Reset();
 
-   pgsTypes::LossMethod GetLossMethod() const;
-   pgsTypes::TimeDependentModel GetTimeDependentModel() const;
+   PrestressLossCriteria::LossMethodType GetLossMethod() const;
+   PrestressLossCriteria::TimeDependentConcreteModelType GetTimeDependentModel() const;
    void SetIgnoreCreepEffects(bool bIgnore);
    bool GetIgnoreCreepEffects() const;
    void SetIgnoreShrinkageEffects(bool bIgnore);

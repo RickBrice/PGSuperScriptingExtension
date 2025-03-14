@@ -60,7 +60,7 @@
     <OutDir>$(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
-    <LinkIncremental>false</LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
@@ -70,7 +70,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ARPDIR)\BridgeLink\Include\;$(PYTHONDIR)\include;\scintilla\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ARPDIR)\BridgeLink\Include;$(PYTHONDIR)\include;\scintilla\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;_ATL_NO_UUIDOF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -79,18 +79,22 @@
       <ProgramDataBaseFileName>$(IntDir)vc.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
-      <AdditionalIncludeDirectories>$(ARPDIR)\PGSuper\Include\;$(ARPDIR)\BridgeLink\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <ModuleDefinitionFile>.\PGSuperScriptingExtension.def</ModuleDefinitionFile>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
       <AdditionalLibraryDirectories>$(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration);$(PYTHONDIR)\libs</AdditionalLibraryDirectories>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -100,10 +104,10 @@
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <CustomBuildStep>
-      <Command>xcopy /y/d $(BOOSTDIR)\stage\lib\boost_python310-vc142-mt-gyd-x64-1_79.dll $(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\</Command>
+      <Command>xcopy /y/d $(BOOSTDIR)\stage\lib\boost_python311-vc143-mt-gyd-x64-1_86.dll $(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\</Command>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\boost_python310-vc142-mt-gyd-x64-1_79.dll</Outputs>
+      <Outputs>$(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\boost_python310-vc143-mt-gyd-x64-1_79.dll</Outputs>
       <Message>Copying boost python to BridgeLink</Message>
     </CustomBuildStep>
   </ItemDefinitionGroup>
@@ -113,7 +117,7 @@
       <DllDataFileName />
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ARPDIR)\BridgeLink\Include\;$(PYTHONDIR)\include;\scintilla\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ARPDIR)\BridgeLink\Include;$(PYTHONDIR)\include;\scintilla\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;xWBFL_MODERNIZATION;NDEBUG;_USRDLL;_ATL_NO_UUIDOF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -122,20 +126,25 @@
       <ProgramDataBaseFileName>$(IntDir)vc.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
-      <AdditionalIncludeDirectories>$(ARPDIR)\PGSuper\Include\;$(ARPDIR)\BridgeLink\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ARPDIR)\BridgeLink\Include</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <ModuleDefinitionFile>.\PGSuperScriptingExtension.def</ModuleDefinitionFile>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX64</TargetMachine>
       <AdditionalLibraryDirectories>$(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration);$(BOOSTDIR)\stage\lib;$(PYTHONDIR)\libs</AdditionalLibraryDirectories>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -149,8 +158,8 @@
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <CustomBuildStep>
-      <Outputs>$(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\boost_python310-vc142-mt-x64-1_79.dll</Outputs>
-      <Command>xcopy /y/d $(BOOSTDIR)\stage\lib\boost_python310-vc142-mt-x64-1_79.dll $(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\</Command>
+      <Outputs>$(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\boost_python310-vc143-mt-x64-1_79.dll</Outputs>
+      <Command>xcopy /y/d $(BOOSTDIR)\stage\lib\boost_python311-vc143-mt-x64-1_86.dll $(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\</Command>
       <Message>Copying boost python to BridgeLink</Message>
     </CustomBuildStep>
   </ItemDefinitionGroup>

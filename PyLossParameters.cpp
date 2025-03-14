@@ -17,12 +17,12 @@ void CPyLossParameters::Reset()
    m_pLossParameters.Release();
 }
 
-pgsTypes::LossMethod CPyLossParameters::GetLossMethod() const
+PrestressLossCriteria::LossMethodType CPyLossParameters::GetLossMethod() const
 {
    return m_pLossParameters->GetLossMethod();
 }
 
-pgsTypes::TimeDependentModel CPyLossParameters::GetTimeDependentModel() const
+PrestressLossCriteria::TimeDependentConcreteModelType CPyLossParameters::GetTimeDependentModel() const
 {
    return m_pLossParameters->GetTimeDependentModel();
 }

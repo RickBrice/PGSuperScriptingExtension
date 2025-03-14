@@ -61,6 +61,4 @@
 
 #include <boost\python.hpp>
 
-#include <PgsExt\PgsExt.h>
-
 #include <Scintilla.h>

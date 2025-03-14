@@ -95,6 +95,7 @@
       <TargetMachine>MachineX64</TargetMachine>
       <AdditionalLibraryDirectories>$(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration);$(PYTHONDIR)\libs</AdditionalLibraryDirectories>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <ForceFileOutput>MultiplyDefinedSymbolOnly</ForceFileOutput>
     </Link>
     <PostBuildEvent>
       <Command>

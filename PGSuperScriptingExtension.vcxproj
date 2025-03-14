@@ -104,7 +104,7 @@
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <CustomBuildStep>
-      <Command>xcopy /y/d $(BOOSTDIR)\stage\lib\boost_python310-vc143-mt-gyd-x64-1_79.dll $(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\</Command>
+      <Command>xcopy /y/d $(BOOSTDIR)\stage\lib\boost_python311-vc143-mt-gyd-x64-1_86.dll $(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>$(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\boost_python310-vc143-mt-gyd-x64-1_79.dll</Outputs>
@@ -159,7 +159,7 @@
     </Manifest>
     <CustomBuildStep>
       <Outputs>$(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\boost_python310-vc143-mt-x64-1_79.dll</Outputs>
-      <Command>xcopy /y/d $(BOOSTDIR)\stage\lib\boost_python310-vc143-mt-x64-1_79.dll $(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\</Command>
+      <Command>xcopy /y/d $(BOOSTDIR)\stage\lib\boost_python311-vc143-mt-x64-1_86.dll $(ARPDIR)\BridgeLink\RegFreeCOM\$(Platform)\$(Configuration)\</Command>
       <Message>Copying boost python to BridgeLink</Message>
     </CustomBuildStep>
   </ItemDefinitionGroup>

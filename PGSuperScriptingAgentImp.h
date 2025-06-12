@@ -25,7 +25,8 @@
 #pragma once
 #include "resource.h"       // main symbols
 #include <EAF\EAFUIIntegration.h>
-#include <EAF\EAFInterfaceCache.h>
+#include <EAF/Agent.h>
+#include <EAF/Menu.h>
 
 #include "Scripting.h"
 #include "MacroDlg.h"
@@ -37,16 +38,6 @@
 #include "PyEditorView.h"
 
 #include "PyScriptEngine.h"
-
-
-
-// {9AD09682-03D8-42CF-B17A-6E679ABFD880}
-DEFINE_GUID(CLSID_PGSuperScriptingAgent,
-   0x9AD09682, 0x03D8, 0x42CF, 0xB1, 0x7a, 0x6e, 0x67, 0x9a, 0xbf, 0xd8, 0x80);
-
-#if defined(_WIN32_WCE) && !defined(_CE_DCOM) && !defined(_CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA)
-#error "Single-threaded COM objects are not properly supported on Windows CE platform, such as the Windows Mobile platforms that do not include full DCOM support. Define _CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA to force ATL to support creating single-thread COM object's and allow use of it's single-threaded COM object implementations. The threading model in your rgs file was set to 'Free' as that is the only threading model supported in non DCOM Windows CE platforms."
-#endif
 
 class CPGSuperScriptingAgent;
 class CScintillaCtrl;
@@ -74,43 +65,14 @@ public:
 
 // CExtensionAgent
 
-class ATL_NO_VTABLE CPGSuperScriptingAgent :
-	public CComObjectRootEx<CComSingleThreadModel>,
-	public CComCoClass<CPGSuperScriptingAgent, &CLSID_PGSuperScriptingAgent>,
-   public IEAFCommandCallback,
-	public IAgentEx,
-   //public IAgentPersist,
-   public IAgentUIIntegration,
+class CPGSuperScriptingAgent : public WBFL::EAF::Agent,
+   public WBFL::EAF::ICommandCallback,
+   public WBFL::EAF::IAgentUIIntegration,
    public IEAFProcessCommandLine, // we add some command line options for launching scripts
    public IScripting
 {
 public:
-   CPGSuperScriptingAgent()
-	{
-	}
-
-DECLARE_REGISTRY_RESOURCEID(IDR_PGSUPERSCRIPTINGAGENT)
-
-DECLARE_NOT_AGGREGATABLE(CPGSuperScriptingAgent)
-
-BEGIN_COM_MAP(CPGSuperScriptingAgent)
-	COM_INTERFACE_ENTRY(IAgent)
-	COM_INTERFACE_ENTRY(IAgentEx)
-	//COM_INTERFACE_ENTRY(IAgentPersist)
-   COM_INTERFACE_ENTRY(IAgentUIIntegration)
-   COM_INTERFACE_ENTRY(IEAFProcessCommandLine)
-   COM_INTERFACE_ENTRY(IScripting)
-END_COM_MAP()
-
-
-
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
-   DECLARE_EAF_AGENT_DATA;
-
-	HRESULT FinalConstruct();
-	void FinalRelease()
-	{
-	}
+   CPGSuperScriptingAgent();
 
    CMyCmdTarget m_MyCommandTarget;
 
@@ -118,7 +80,7 @@ END_COM_MAP()
 
    CBitmap m_bmpMenu;
 
-   CEAFMenu* m_pMyMenu;
+   std::shared_ptr<WBFL::EAF::Menu> m_pMyMenu;
    void CreateMenus();
    void RemoveMenus();
 
@@ -134,30 +96,24 @@ END_COM_MAP()
 
    void EditScript(LPCTSTR lpszScriptFile);
 
-// IAgentEx
+// Agent
 public:
-   STDMETHOD(SetBroker)(IBroker* pBroker) override;
-   STDMETHOD(RegInterfaces)() override;
-   STDMETHOD(Init)() override;
-   STDMETHOD(Init2)() override;
-   STDMETHOD(Reset)() override;
-   STDMETHOD(ShutDown)() override;
-   STDMETHOD(GetClassID)(CLSID* pCLSID) override;
-
-//// IAgentPersist
-//public:
-//   STDMETHOD(Load)(/*[in]*/ IStructuredLoad* pStrLoad) override;
-//   STDMETHOD(Save)(/*[in]*/ IStructuredSave* pStrSave) override;
+   std::_tstring GetName() const override { return _T("PGSuperScriptingAgent"); }
+   bool RegisterInterfaces() override;
+   bool Init() override;
+   bool Reset() override;
+   bool ShutDown() override;
+   CLSID GetCLSID() const override;
 
 // IAgentUIIntegration
 public:
-   STDMETHOD(IntegrateWithUI)(BOOL bIntegrate) override;
+   bool IntegrateWithUI(bool bIntegrate) override;
 
 // IEAFCommandCallback
 public:
-   virtual BOOL OnCommandMessage(UINT nID,int nCode,void* pExtra,AFX_CMDHANDLERINFO* pHandlerInfo) override;
-   virtual BOOL GetStatusBarMessageString(UINT nID, CString& rMessage) const override;
-   virtual BOOL GetToolTipMessageString(UINT nID, CString& rMessage) const override;
+   BOOL OnCommandMessage(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) override;
+   BOOL GetStatusBarMessageString(UINT nID, CString& rMessage) const override;
+   BOOL GetToolTipMessageString(UINT nID, CString& rMessage) const override;
 
 // IEAFProcessCommandLine
 public:
@@ -171,6 +127,7 @@ public:
    virtual CString GetScriptFile(LPCTSTR lpszScriptName) const override;
 
 private:
+   EAF_DECLARE_AGENT_DATA;
    void RegisterUIExtensions();
    void UnregisterUIExtensions();
 
@@ -183,4 +140,4 @@ private:
    CPyEditorView* m_pView;
 };
 
-OBJECT_ENTRY_AUTO(CLSID_PGSuperScriptingAgent, CPGSuperScriptingAgent)
+//OBJECT_ENTRY_AUTO(CLSID_PGSuperScriptingAgent, CPGSuperScriptingAgent)

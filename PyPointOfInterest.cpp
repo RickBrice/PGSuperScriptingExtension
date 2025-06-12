@@ -1,26 +1,20 @@
 #include "stdafx.h"
 #include "PyPointOfInterest.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-void CPyPointOfInterest::Init(IBroker* pBroker)
+void CPyPointOfInterest::Init(std::weak_ptr<WBFL::EAF::Broker> pBroker)
 {
-   pBroker->GetInterface(IID_IPointOfInterest, (IUnknown**)&m_pPoi);
+   auto broker = pBroker.lock();
+   m_pPoi = broker->GetInterface<IPointOfInterest>(IID_IPointOfInterest);
 }
 
 void CPyPointOfInterest::Reset()
 {
-   m_pPoi.Release();
 }
 
 std::vector<pgsPointOfInterest> CPyPointOfInterest::GetPointsOfInterest(const CSegmentKey& segmentKey) const
 {
    PoiList poiList;
-   m_pPoi->GetPointsOfInterest(segmentKey,&poiList);
+   m_pPoi.lock()->GetPointsOfInterest(segmentKey, &poiList);
    std::vector<pgsPointOfInterest> vPoi;
    MakePoiVector(poiList, &vPoi);
    return vPoi;
@@ -29,7 +23,7 @@ std::vector<pgsPointOfInterest> CPyPointOfInterest::GetPointsOfInterest(const CS
 std::vector<pgsPointOfInterest> CPyPointOfInterest::GetSpanPointsOfInterest(const CSpanKey& spanKey) const
 {
    PoiList poiList;
-   m_pPoi->GetPointsOfInterest(spanKey,&poiList);
+   m_pPoi.lock()->GetPointsOfInterest(spanKey, &poiList);
    std::vector<pgsPointOfInterest> vPoi;
    MakePoiVector(poiList, &vPoi);
    return vPoi;

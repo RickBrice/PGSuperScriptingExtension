@@ -1,16 +1,17 @@
 #pragma once
+#include <AgentTools.h>
 
-#include <IReportManager.h>
+#include <EAF/EAFReportManager.h>
 
 class CPyReportManager
 {
 public:
-   void Init(IBroker* pBroker);
+   void Init(std::weak_ptr<WBFL::EAF::Broker> pBroker);
    void Reset();
 
    IndexType GetReportBuilderCount();
    boost::python::list GetReportNames();
 
 private:
-   CComPtr<IReportManager> m_pReportManager;
+   std::weak_ptr<IEAFReportManager> m_pReportManager;
 };

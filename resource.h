@@ -3,10 +3,8 @@
 // Used by PGSuperScriptingAgent.rc
 //
 #define IDS_PROJNAME                    100
-#define IDR_PGSUPERSCRIPTINGEXTENSION   101
 #define IDD_SCINTILLA_FINDDLGORD        101
 #define IDD_SCINTILLA_REPLACEDLGORD     102
-#define IDR_PGSUPERSCRIPTINGAGENT       106
 #define IDR_TOOLBAR                     201
 #define IDR_MENU                        203
 #define IDC_RUN                         204

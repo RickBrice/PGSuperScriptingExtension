@@ -1,13 +1,7 @@
 #include "stdafx.h"
 #include "PyBridgeModelView.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-void CPyBridgeModelView::Init(IBridgeModelViewController* pViewController,ISelection* pSelection)
+void CPyBridgeModelView::Init(IBridgeModelViewController* pViewController,std::weak_ptr<ISelection> pSelection)
 {
    m_pViewController = pViewController;
    m_pSelection = pSelection;
@@ -96,75 +90,75 @@ bool CPyBridgeModelView::GetSchematic() const
 
 void CPyBridgeModelView::ClearSelection()
 {
-   m_pSelection->ClearSelection();
+   m_pSelection.lock()->ClearSelection();
 }
 
 PierIndexType CPyBridgeModelView::GetSelectedPier()
 {
-   return m_pSelection->GetSelectedPier();
+   return m_pSelection.lock()->GetSelectedPier();
 }
 
 SpanIndexType CPyBridgeModelView::GetSelectedSpan()
 {
-   return m_pSelection->GetSelectedSpan();
+   return m_pSelection.lock()->GetSelectedSpan();
 }
 
 CGirderKey CPyBridgeModelView::GetSelectedGirder()
 {
-   return m_pSelection->GetSelectedGirder();
+   return m_pSelection.lock()->GetSelectedGirder();
 }
 
 CSegmentKey CPyBridgeModelView::GetSelectedSegment()
 {
-   return m_pSelection->GetSelectedSegment();
+   return m_pSelection.lock()->GetSelectedSegment();
 }
 
 bool CPyBridgeModelView::IsDeckSelected()
 {
-   return m_pSelection->IsDeckSelected();
+   return m_pSelection.lock()->IsDeckSelected();
 }
 
 bool CPyBridgeModelView::IsAlignmentSelected()
 {
-   return m_pSelection->IsAlignmentSelected();
+   return m_pSelection.lock()->IsAlignmentSelected();
 }
 
 bool CPyBridgeModelView::IsRailingSystemSelected(pgsTypes::TrafficBarrierOrientation orientation)
 {
-   return m_pSelection->IsRailingSystemSelected(orientation);
+   return m_pSelection.lock()->IsRailingSystemSelected(orientation);
 }
 
 void CPyBridgeModelView::SelectPier(PierIndexType pierIdx)
 {
-   m_pSelection->SelectPier(pierIdx);
+   m_pSelection.lock()->SelectPier(pierIdx);
 }
 
 void CPyBridgeModelView::SelectSpan(SpanIndexType spanIdx)
 {
-   m_pSelection->SelectSpan(spanIdx);
+   m_pSelection.lock()->SelectSpan(spanIdx);
 }
 
 void CPyBridgeModelView::SelectGirder(const CGirderKey& girderKey)
 {
-   m_pSelection->SelectGirder(girderKey);
+   m_pSelection.lock()->SelectGirder(girderKey);
 }
 
 void CPyBridgeModelView::SelectSegment(const CSegmentKey& segmentKey)
 {
-   m_pSelection->SelectSegment(segmentKey);
+   m_pSelection.lock()->SelectSegment(segmentKey);
 }
 
 void CPyBridgeModelView::SelectDeck()
 {
-   m_pSelection->SelectDeck();
+   m_pSelection.lock()->SelectDeck();
 }
 
 void CPyBridgeModelView::SelectAlignment()
 {
-   m_pSelection->SelectAlignment();
+   m_pSelection.lock()->SelectAlignment();
 }
 
 void CPyBridgeModelView::SelectRailingSystem(pgsTypes::TrafficBarrierOrientation orientation)
 {
-   m_pSelection->SelectRailingSystem(orientation);
+   m_pSelection.lock()->SelectRailingSystem(orientation);
 }

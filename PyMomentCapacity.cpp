@@ -1,23 +1,17 @@
 #include "stdafx.h"
 #include "PyMomentCapacity.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-void CPyMomentCapacity::Init(IBroker* pBroker)
+void CPyMomentCapacity::Init(std::weak_ptr<WBFL::EAF::Broker> pBroker)
 {
-   pBroker->GetInterface(IID_IMomentCapacity, (IUnknown**)&m_pMomentCapacity);
+   auto broker = pBroker.lock();
+   m_pMomentCapacity = broker->GetInterface<IMomentCapacity>(IID_IMomentCapacity);
 }
 
 void CPyMomentCapacity::Reset()
 {
-   m_pMomentCapacity.Release();
 }
 
 const MINMOMENTCAPDETAILS& CPyMomentCapacity::GetMinMomentCapacityDetails(IntervalIndexType intervalIdx, const pgsPointOfInterest& poi, bool bPositiveMoment)
 {
-   return *(m_pMomentCapacity->GetMinMomentCapacityDetails(intervalIdx, poi, bPositiveMoment));
+   return *(m_pMomentCapacity.lock()->GetMinMomentCapacityDetails(intervalIdx, poi, bPositiveMoment));
 }

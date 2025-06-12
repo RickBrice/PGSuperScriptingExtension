@@ -9,13 +9,14 @@
 
 #include <initguid.h>
 #include "dllmain.h"
+#include "CLSID.h"
 #include <WBFLCore_i.c>
 #include "PGSuperScriptingAgentImp.h"
 #include "PGSuperCatCom.h"
 #include "PGSpliceCatCom.h"
 #include <EAF\EAFUIIntegration.h>
 #include <EAF\EAFStatusCenter.h>
-#include <IGraphManager.h>
+#include <EAF/EAFGraphManager.h>
 #include <IFace\Selection.h>
 #include <IFace\AnalysisResults.h>
 #include <IFace\Bridge.h>
@@ -41,13 +42,13 @@
 #include "PyBridgeTypes.h"
 #include "PyPointOfInterestTypes.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
+//CPGSuperScriptingExtensionModule _AtlModule;
 
-CPGSuperScriptingExtensionModule _AtlModule;
+#include <EAF/ComponentModule.h>
+WBFL::EAF::ComponentModule _Module;
+EAF_BEGIN_OBJECT_MAP(ObjectMap)
+EAF_OBJECT_ENTRY(CLSID_PGSuperScriptingAgent, CPGSuperScriptingAgent)
+EAF_END_OBJECT_MAP()
 
 CPyPGSuper& GetApp() 
 { 
@@ -239,9 +240,9 @@ BOOST_PYTHON_MODULE(BridgeLink)
       ;
 
    enum_<ILoadModifiers::Level>("LoadModifierLevel")
-      .value("Low", ILoadModifiers::Low)
-      .value("Normal", ILoadModifiers::Normal)
-      .value("High", ILoadModifiers::High)
+      .value("Low", ILoadModifiers::Level::Low)
+      .value("Normal", ILoadModifiers::Level::Normal)
+      .value("High", ILoadModifiers::Level::High)
       ;
 
    class_<CPyLoadModifiers>("LoadModifiers")
@@ -338,6 +339,8 @@ CExtensionApp theApp;
 
 BOOL CExtensionApp::InitInstance()
 {
+   _Module.Init(ObjectMap);
+
    SetRegistryKey(_T("Washington State Department of Transportation"));
    ReadSettings();
 
@@ -380,6 +383,8 @@ int CExtensionApp::ExitInstance()
       m_pDocManager = nullptr;
    }
    
+   _Module.Term();
+
    return CWinApp::ExitInstance();
 }
 

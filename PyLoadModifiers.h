@@ -1,11 +1,12 @@
 #pragma once
+#include <AgentTools.h>
 
 #include <IFace\Project.h>
 
 class CPyLoadModifiers
 {
 public:
-   void Init(IBroker* pBroker);
+   void Init(std::weak_ptr<WBFL::EAF::Broker> pBroker);
    void Reset();
 
    void SetDuctilityModifier(ILoadModifiers::Level level, Float64 value);
@@ -21,5 +22,5 @@ public:
    ILoadModifiers::Level GetRedundancyLevel() const;
 
 private:
-   CComPtr<ILoadModifiers> m_pLoadModifiers;
+   std::weak_ptr<ILoadModifiers> m_pLoadModifiers;
 }; 

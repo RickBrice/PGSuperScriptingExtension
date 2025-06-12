@@ -1,32 +1,26 @@
 #include "stdafx.h"
 #include "PyReportManager.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-void CPyReportManager::Init(IBroker* pBroker)
+void CPyReportManager::Init(std::weak_ptr<WBFL::EAF::Broker> pBroker)
 {
-   pBroker->GetInterface(IID_IReportManager, (IUnknown**)&m_pReportManager);
+   auto broker = pBroker.lock();
+   m_pReportManager = broker->GetInterface<IEAFReportManager>(IID_IEAFReportManager);
 }
 
 void CPyReportManager::Reset()
 {
-   m_pReportManager.Release();
 }
 
 IndexType CPyReportManager::GetReportBuilderCount()
 {
-   return m_pReportManager->GetReportBuilderCount();
+   return m_pReportManager.lock()->GetReportBuilderCount();
 }
 
 boost::python::list CPyReportManager::GetReportNames()
 {
    USES_CONVERSION;
    boost::python::list list;
-   std::vector<std::_tstring> vNames = m_pReportManager->GetReportNames();
+   std::vector<std::_tstring> vNames = m_pReportManager.lock()->GetReportNames();
    for (const auto& name : vNames)
    {
 #if defined _UNICODE

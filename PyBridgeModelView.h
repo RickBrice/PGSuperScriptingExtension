@@ -7,7 +7,7 @@
 class CPyBridgeModelView : public CPyViewControllerBase
 {
 public:
-   void Init(IBridgeModelViewController* pViewController,ISelection* pSelection);
+   void Init(IBridgeModelViewController* pViewController,std::weak_ptr<ISelection> pSelection);
 
    void GetGroupRange(GroupIndexType* pStartGroupIdx, GroupIndexType* pEndGroupIdx) const;
    void SetGroupRange(GroupIndexType startGroupIdx, GroupIndexType endGroupIdx);
@@ -51,6 +51,6 @@ public:
 
 private:
    CComPtr<IBridgeModelViewController> m_pViewController;
-   CComPtr<ISelection> m_pSelection;
+   std::weak_ptr<ISelection> m_pSelection;
 };
 

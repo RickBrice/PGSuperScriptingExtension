@@ -18,23 +18,22 @@ static char THIS_FILE[] = __FILE__;
 
 /////////////////////////////////////////////
 
-void CPyViews::Init(IBroker* pBroker)
+void CPyViews::Init(std::weak_ptr<WBFL::EAF::Broker> pBroker)
 {
    m_pBroker = pBroker;
-   m_pBroker->GetInterface(IID_IViews, (IUnknown**)&m_pViews); // can't use GET_IFACE because it will create a local variable that goes out of scope
+   m_pViews = GetBroker()->GetInterface<IViews>(IID_IViews); // can't use GET_IFACE because it will create a local variable that goes out of scope
 }
 
 void CPyViews::Reset()
 {
-   m_pViews.Release();
 }
 
 CPyBridgeModelView CPyViews::CreateBridgeModelView()
 {
    CComPtr<IBridgeModelViewController> controller;
-   m_pViews->CreateBridgeModelView(&controller);
+   m_pViews.lock()->CreateBridgeModelView(&controller);
 
-   GET_IFACE(ISelection, pSelection);
+   GET_IFACE2(GetBroker(),ISelection, pSelection);
    CPyBridgeModelView view;
    view.Init(controller, pSelection);
    return view;
@@ -43,7 +42,7 @@ CPyBridgeModelView CPyViews::CreateBridgeModelView()
 CPyGirderModelView CPyViews::CreateGirderView()
 {
    CComPtr<IGirderModelViewController> controller;
-   m_pViews->CreateGirderView(CGirderKey(ALL_GROUPS, 0), &controller);
+   m_pViews.lock()->CreateGirderView(CGirderKey(ALL_GROUPS, 0), &controller);
 
    CPyGirderModelView view;
    view.Init(controller);
@@ -53,7 +52,7 @@ CPyGirderModelView CPyViews::CreateGirderView()
 CPyLoadsView CPyViews::CreateLoadsView()
 {
    CComPtr<ILoadsViewController> controller;
-   m_pViews->CreateLoadsView(&controller);
+   m_pViews.lock()->CreateLoadsView(&controller);
 
    CPyLoadsView view;
    view.Init(controller);
@@ -62,26 +61,26 @@ CPyLoadsView CPyViews::CreateLoadsView()
 
 void CPyViews::CreateLibraryEditorView()
 {
-   m_pViews->CreateLibraryEditorView();
+   m_pViews.lock()->CreateLibraryEditorView();
 }
 
 void CPyViews::CreateGraphView(IndexType idx)
 {
-   m_pViews->CreateGraphView(idx);
+   m_pViews.lock()->CreateGraphView(idx);
 }
 
 CPyViewControllerBase* CPyViews::CreateGraphViewByName(LPCSTR strName)
 {
    USES_CONVERSION;
    CComPtr<IEAFViewController> controller;
-   m_pViews->CreateGraphView(A2T(strName),&controller);
+   m_pViews.lock()->CreateGraphView(A2T(strName), &controller);
 
    return CreateGraphContollerWrapper(controller);
 }
 
 void CPyViews::CreateReport(IndexType idx,bool bPrompt)
 {
-   m_pViews->CreateReportView(idx,bPrompt);
+   m_pViews.lock()->CreateReportView(idx, bPrompt);
 }
 
 CPyViewControllerBase* CPyViews::CreateGraphContollerWrapper(IEAFViewController* pController) const

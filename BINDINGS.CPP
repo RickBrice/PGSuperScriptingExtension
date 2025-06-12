@@ -1,15 +1,10 @@
 #include "stdafx.h"
 #include "bindings.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-void CPyPGSuper::Init(IBroker* pBroker)
+void CPyPGSuper::Init(std::weak_ptr<WBFL::EAF::Broker> pBroker)
 {
-   pBroker->GetInterface(IID_IVersionInfo, (IUnknown**)&m_pVersionInfo);
+   auto broker = pBroker.lock();
+   m_pVersionInfo = broker->GetInterface<IVersionInfo>(IID_IVersionInfo);
 
    m_Properties.Init(pBroker);
    m_Environment.Init(pBroker);
@@ -35,8 +30,6 @@ void CPyPGSuper::Init(IBroker* pBroker)
 
 void CPyPGSuper::Reset()
 {
-   m_pVersionInfo.Release();
-
    m_Properties.Reset();
    m_Environment.Reset();
    m_Roadway.Reset();
@@ -61,25 +54,25 @@ void CPyPGSuper::Reset()
 std::string CPyPGSuper::GetVersionString() const
 {
    USES_CONVERSION;
-   return T2A(m_pVersionInfo->GetVersionString(false));
+   return T2A(m_pVersionInfo.lock()->GetVersionString(false));
 }
 
 std::string CPyPGSuper::GetVersionStringWithBuildNumber() const
 {
    USES_CONVERSION;
-   return T2A(m_pVersionInfo->GetVersionString(true));
+   return T2A(m_pVersionInfo.lock()->GetVersionString(true));
 }
 
 std::string CPyPGSuper::GetVersion() const
 {
    USES_CONVERSION;
-   return T2A(m_pVersionInfo->GetVersion(false));
+   return T2A(m_pVersionInfo.lock()->GetVersion(false));
 }
 
 std::string CPyPGSuper::GetVersionWithBuildNumber() const
 {
    USES_CONVERSION;
-   return T2A(m_pVersionInfo->GetVersion(true));
+   return T2A(m_pVersionInfo.lock()->GetVersion(true));
 }
 
 CPyProjectProperties CPyPGSuper::Properties()

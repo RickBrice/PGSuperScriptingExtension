@@ -1,183 +1,177 @@
 #include "stdafx.h"
 #include "PyLossParameters.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-void CPyLossParameters::Init(IBroker* pBroker)
+void CPyLossParameters::Init(std::weak_ptr<WBFL::EAF::Broker> pBroker)
 {
-   pBroker->GetInterface(IID_ILossParameters, (IUnknown**)&m_pLossParameters);
+   auto broker = pBroker.lock();
+   m_pLossParameters = broker->GetInterface<ILossParameters>(IID_ILossParameters);
 }
 
 void CPyLossParameters::Reset()
 {
-   m_pLossParameters.Release();
 }
 
 PrestressLossCriteria::LossMethodType CPyLossParameters::GetLossMethod() const
 {
-   return m_pLossParameters->GetLossMethod();
+   return m_pLossParameters.lock()->GetLossMethod();
 }
 
 PrestressLossCriteria::TimeDependentConcreteModelType CPyLossParameters::GetTimeDependentModel() const
 {
-   return m_pLossParameters->GetTimeDependentModel();
+   return m_pLossParameters.lock()->GetTimeDependentModel();
 }
 
 void CPyLossParameters::SetIgnoreCreepEffects(bool bIgnore)
 {
-   m_pLossParameters->IgnoreCreepEffects(bIgnore);
+   m_pLossParameters.lock()->IgnoreCreepEffects(bIgnore);
 }
 
 bool CPyLossParameters::GetIgnoreCreepEffects() const
 {
-   return m_pLossParameters->IgnoreCreepEffects();
+   return m_pLossParameters.lock()->IgnoreCreepEffects();
 }
 
 void CPyLossParameters::SetIgnoreShrinkageEffects(bool bIgnore)
 {
-   m_pLossParameters->IgnoreShrinkageEffects(bIgnore);
+   m_pLossParameters.lock()->IgnoreShrinkageEffects(bIgnore);
 }
 
 bool CPyLossParameters::GetIgnoreShrinkageEffects() const
 {
-   return m_pLossParameters->IgnoreShrinkageEffects();
+   return m_pLossParameters.lock()->IgnoreShrinkageEffects();
 }
 
 void CPyLossParameters::SetIgnoreRelaxationEffects(bool bIgnore)
 {
-   m_pLossParameters->IgnoreRelaxationEffects(bIgnore);
+   m_pLossParameters.lock()->IgnoreRelaxationEffects(bIgnore);
 }
 
 bool CPyLossParameters::GetIgnoreRelaxationEffects() const
 {
-   return m_pLossParameters->IgnoreRelaxationEffects();
+   return m_pLossParameters.lock()->IgnoreRelaxationEffects();
 }
 
 void CPyLossParameters::SetIgnoreTimeDependentEffects(bool bIgnoreCreep, bool bIgnoreShrinkage, bool bIgnoreRelaxation)
 {
-   m_pLossParameters->IgnoreTimeDependentEffects(bIgnoreCreep, bIgnoreShrinkage, bIgnoreRelaxation);
+   m_pLossParameters.lock()->IgnoreTimeDependentEffects(bIgnoreCreep, bIgnoreShrinkage, bIgnoreRelaxation);
 }
 
 void CPyLossParameters::SetTendonPostTensionParameters(Float64 Dset, Float64 wobble, Float64 friction)
 {
-   m_pLossParameters->SetTendonPostTensionParameters(Dset, wobble, friction);
+   m_pLossParameters.lock()->SetTendonPostTensionParameters(Dset, wobble, friction);
 }
 
 void CPyLossParameters::GetTendonPostTensionParameters(Float64* Dset, Float64* wobble, Float64* friction) const
 {
-   m_pLossParameters->GetTendonPostTensionParameters(Dset, wobble, friction);
+   m_pLossParameters.lock()->GetTendonPostTensionParameters(Dset, wobble, friction);
 }
 
 void CPyLossParameters::SetTemporaryStrandPostTensionParameters(Float64 Dset, Float64 wobble, Float64 friction)
 {
-   m_pLossParameters->SetTemporaryStrandPostTensionParameters(Dset, wobble, friction);
+   m_pLossParameters.lock()->SetTemporaryStrandPostTensionParameters(Dset, wobble, friction);
 }
 
 void CPyLossParameters::GetTemporaryStrandPostTensionParameters(Float64* Dset, Float64* wobble, Float64* friction) const
 {
-   m_pLossParameters->GetTemporaryStrandPostTensionParameters(Dset, wobble, friction);
+   m_pLossParameters.lock()->GetTemporaryStrandPostTensionParameters(Dset, wobble, friction);
 }
 
 void CPyLossParameters::SetUseGeneralLumpSumLosses(bool bLumpSum)
 {
-   m_pLossParameters->UseGeneralLumpSumLosses(bLumpSum);
+   m_pLossParameters.lock()->UseGeneralLumpSumLosses(bLumpSum);
 }
 
 bool CPyLossParameters::GetUseGeneralLumpSumLosses() const
 {
-   return m_pLossParameters->UseGeneralLumpSumLosses();
+   return m_pLossParameters.lock()->UseGeneralLumpSumLosses();
 }
 
 Float64 CPyLossParameters::GetBeforeXferLosses() const
 {
-   return m_pLossParameters->GetBeforeXferLosses();
+   return m_pLossParameters.lock()->GetBeforeXferLosses();
 }
 
 void CPyLossParameters::SetBeforeXferLosses(Float64 loss)
 {
-   m_pLossParameters->SetBeforeXferLosses(loss);
+   m_pLossParameters.lock()->SetBeforeXferLosses(loss);
 }
 
 Float64 CPyLossParameters::GetAfterXferLosses() const
 {
-   return m_pLossParameters->GetAfterXferLosses();
+   return m_pLossParameters.lock()->GetAfterXferLosses();
 }
 
 void CPyLossParameters::SetAfterXferLosses(Float64 loss)
 {
-   m_pLossParameters->SetAfterXferLosses(loss);
+   m_pLossParameters.lock()->SetAfterXferLosses(loss);
 }
 
 Float64 CPyLossParameters::GetLiftingLosses() const
 {
-   return m_pLossParameters->GetLiftingLosses();
+   return m_pLossParameters.lock()->GetLiftingLosses();
 }
 
 void CPyLossParameters::SetLiftingLosses(Float64 loss)
 {
-   m_pLossParameters->SetLiftingLosses(loss);
+   m_pLossParameters.lock()->SetLiftingLosses(loss);
 }
 
 Float64 CPyLossParameters::GetShippingLosses() const
 {
-   return m_pLossParameters->GetShippingLosses();
+   return m_pLossParameters.lock()->GetShippingLosses();
 }
 
 void CPyLossParameters::SetShippingLosses(Float64 loss)
 {
-   m_pLossParameters->SetShippingLosses(loss);
+   m_pLossParameters.lock()->SetShippingLosses(loss);
 }
 
 Float64 CPyLossParameters::GetBeforeTempStrandRemovalLosses() const
 {
-   return m_pLossParameters->GetBeforeTempStrandRemovalLosses();
+   return m_pLossParameters.lock()->GetBeforeTempStrandRemovalLosses();
 }
 
 void CPyLossParameters::SetBeforeTempStrandRemovalLosses(Float64 loss)
 {
-   m_pLossParameters->SetBeforeTempStrandRemovalLosses(loss);
+   m_pLossParameters.lock()->SetBeforeTempStrandRemovalLosses(loss);
 }
 
 Float64 CPyLossParameters::GetAfterTempStrandRemovalLosses() const
 {
-   return m_pLossParameters->GetAfterTempStrandRemovalLosses();
+   return m_pLossParameters.lock()->GetAfterTempStrandRemovalLosses();
 }
 
 void CPyLossParameters::SetAfterTempStrandRemovalLosses(Float64 loss)
 {
-   m_pLossParameters->SetAfterTempStrandRemovalLosses(loss);
+   m_pLossParameters.lock()->SetAfterTempStrandRemovalLosses(loss);
 }
 
 Float64 CPyLossParameters::GetAfterDeckPlacementLosses() const
 {
-   return m_pLossParameters->GetAfterDeckPlacementLosses();
+   return m_pLossParameters.lock()->GetAfterDeckPlacementLosses();
 }
 
 void CPyLossParameters::SetAfterDeckPlacementLosses(Float64 loss)
 {
-   m_pLossParameters->SetAfterDeckPlacementLosses(loss);
+   m_pLossParameters.lock()->SetAfterDeckPlacementLosses(loss);
 }
 
 Float64 CPyLossParameters::GetAfterSIDLLosses() const
 {
-   return m_pLossParameters->GetAfterSIDLLosses();
+   return m_pLossParameters.lock()->GetAfterSIDLLosses();
 }
 
 void CPyLossParameters::SetAfterSIDLLosses(Float64 loss)
 {
-   m_pLossParameters->SetAfterSIDLLosses(loss);
+   m_pLossParameters.lock()->SetAfterSIDLLosses(loss);
 }
 
 Float64 CPyLossParameters::GetFinalLosses() const
 {
-   return m_pLossParameters->GetFinalLosses();
+   return m_pLossParameters.lock()->GetFinalLosses();
 }
 
 void CPyLossParameters::SetFinalLosses(Float64 loss)
 {
-   m_pLossParameters->SetFinalLosses(loss);
+   m_pLossParameters.lock()->SetFinalLosses(loss);
 }

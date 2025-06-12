@@ -1,28 +1,22 @@
 #include "stdafx.h"
 #include "PyEffectiveFlangeWidth.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-void CPyEffectiveFlangeWidth::Init(IBroker* pBroker)
+void CPyEffectiveFlangeWidth::Init(std::weak_ptr<WBFL::EAF::Broker> pBroker)
 {
-   pBroker->GetInterface(IID_IEffectiveFlangeWidth, (IUnknown**)&m_pEffectiveFlangeWidth);
+   auto broker = pBroker.lock();
+   m_pEffectiveFlangeWidth = broker->GetInterface<IEffectiveFlangeWidth>(IID_IEffectiveFlangeWidth);
 }
 
 void CPyEffectiveFlangeWidth::Reset()
 {
-   m_pEffectiveFlangeWidth.Release();
 }
 
 bool CPyEffectiveFlangeWidth::GetIgnoreEffectiveFlangeWidthLimits() const
 {
-   return m_pEffectiveFlangeWidth->IgnoreEffectiveFlangeWidthLimits();
+   return m_pEffectiveFlangeWidth.lock()->IgnoreEffectiveFlangeWidthLimits();
 }
 
 void CPyEffectiveFlangeWidth::SetIgnoreEffectiveFlangeWidthLimits(bool bIgnore)
 {
-   m_pEffectiveFlangeWidth->IgnoreEffectiveFlangeWidthLimits(bIgnore);
+   m_pEffectiveFlangeWidth.lock()->IgnoreEffectiveFlangeWidthLimits(bIgnore);
 }

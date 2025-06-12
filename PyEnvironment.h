@@ -1,11 +1,12 @@
 #pragma once
+#include <AgentTools.h>
 
 #include <IFace\Project.h>
 
 class CPyEnvironment
 {
 public:
-   void Init(IBroker* pBroker);
+   void Init(std::weak_ptr<WBFL::EAF::Broker> pBroker);
    void Reset();
 
    pgsTypes::ExposureCondition GetExposureCondition() const;
@@ -14,5 +15,5 @@ public:
    void SetRelHumidity(Float64 newVal);
 
 private:
-   CComPtr<IEnvironment> m_pEnvironment;
+   std::weak_ptr<IEnvironment> m_pEnvironment;
 }; 

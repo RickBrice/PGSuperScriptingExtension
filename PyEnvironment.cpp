@@ -1,38 +1,32 @@
 #include "stdafx.h"
 #include "PyEnvironment.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-void CPyEnvironment::Init(IBroker* pBroker)
+void CPyEnvironment::Init(std::weak_ptr<WBFL::EAF::Broker> pBroker)
 {
-   pBroker->GetInterface(IID_IEnvironment, (IUnknown**)&m_pEnvironment);
+   auto broker = pBroker.lock();
+   m_pEnvironment = broker->GetInterface<IEnvironment>(IID_IEnvironment);
 }
 
 void CPyEnvironment::Reset()
 {
-   m_pEnvironment.Release();
 }
 
 pgsTypes::ExposureCondition CPyEnvironment::GetExposureCondition() const
 {
-   return m_pEnvironment->GetExposureCondition();
+   return m_pEnvironment.lock()->GetExposureCondition();
 }
 
 void CPyEnvironment::SetExposureCondition(pgsTypes::ExposureCondition newVal)
 {
-   m_pEnvironment->SetExposureCondition(newVal);
+   m_pEnvironment.lock()->SetExposureCondition(newVal);
 }
 
 Float64 CPyEnvironment::GetRelHumidity() const
 {
-   return m_pEnvironment->GetRelHumidity();
+   return m_pEnvironment.lock()->GetRelHumidity();
 }
 
 void CPyEnvironment::SetRelHumidity(Float64 newVal)
 {
-   m_pEnvironment->SetRelHumidity(newVal);
+   m_pEnvironment.lock()->SetRelHumidity(newVal);
 }

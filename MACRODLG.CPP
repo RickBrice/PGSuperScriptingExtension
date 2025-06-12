@@ -5,6 +5,7 @@
 #include "MacroDlg.h"
 #include "afxdialogex.h"
 #include "resource.h"
+#include <AgentTools.h>
 
 #include <EAF\EAFUtilities.h>
 #include <EAF\EAFApp.h>
@@ -65,8 +66,7 @@ BOOL CMacroDlg::OnInitDialog()
    // TODO:  Add extra initialization here
    CComboBox* pCB = (CComboBox*)GetDlgItem(IDC_MACROS);
 
-   CComPtr<IBroker> pBroker;
-   EAFGetBroker(&pBroker);
+   auto pBroker = EAFGetBroker();
    GET_IFACE2(pBroker, IScripting, pScripting);
    std::vector<CString> vScripts = pScripting->GetScriptNames();
    for (const auto& name : vScripts)
@@ -85,8 +85,7 @@ void CMacroDlg::OnRun()
    CString strScript;
    pCB->GetLBText(pCB->GetCurSel(), strScript);
 
-   CComPtr<IBroker> pBroker;
-   EAFGetBroker(&pBroker);
+   auto pBroker = EAFGetBroker();
    GET_IFACE2(pBroker, IScripting, pScripting);
    strScript = pScripting->GetScriptFile(strScript);
 
@@ -102,8 +101,7 @@ void CMacroDlg::OnDebug()
    CString strScript;
    pCB->GetLBText(curSel, strScript);
 
-   CComPtr<IBroker> pBroker;
-   EAFGetBroker(&pBroker);
+   auto pBroker = EAFGetBroker();
    GET_IFACE2(pBroker, IScripting, pScripting);
    CString strScriptFile = pScripting->GetScriptFile(strScript);
    m_pScriptEngine->Debug(strScriptFile);
@@ -118,8 +116,7 @@ void CMacroDlg::OnEdit()
    CString strScript;
    pCB->GetLBText(curSel, strScript);
 
-   CComPtr<IBroker> pBroker;
-   EAFGetBroker(&pBroker);
+   auto pBroker = EAFGetBroker();
    GET_IFACE2(pBroker, IScripting, pScripting);
    CString strScriptFile = pScripting->GetScriptFile(strScript);
    m_pScriptEngine->Edit(strScriptFile);
@@ -133,8 +130,7 @@ void CMacroDlg::OnCreate()
    CString strScript;
    pCB->GetWindowText(strScript);
 
-   CComPtr<IBroker> pBroker;
-   EAFGetBroker(&pBroker);
+   auto pBroker = EAFGetBroker();
    GET_IFACE2(pBroker, IScripting, pScripting);
    CString strScriptFile = pScripting->GetScriptFile(strScript);
 
@@ -177,8 +173,7 @@ void CMacroDlg::OnDelete()
    CString strScript;
    pCB->GetLBText(curSel, strScript);
 
-   CComPtr<IBroker> pBroker;
-   EAFGetBroker(&pBroker);
+   auto pBroker = EAFGetBroker();
    GET_IFACE2(pBroker, IScripting, pScripting);
    CString strScriptFile = pScripting->GetScriptFile(strScript);
 

@@ -1,0 +1,10 @@
+{
+    "Component": {
+        "Name": "Scripting Extension",
+        "CLSID": "{9AD09682-03D8-42CF-B17A-6E679ABFD880}",
+        "dll": "PGSuperScriptingExtension.dll",
+        "Categories": {
+            "CATID": "{4B5AD09A-E616-468E-8F84-4F9D68E7B6CA}"
+        }
+    }
+}

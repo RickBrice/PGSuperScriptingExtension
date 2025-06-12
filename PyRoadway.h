@@ -1,11 +1,12 @@
 #pragma once
+#include <AgentTools.h>
 
 #include <IFace\Project.h>
 
 class CPyRoadway
 {
 public:
-   void Init(IBroker* pBroker);
+   void Init(std::weak_ptr<WBFL::EAF::Broker> pBroker);
    void Reset();
 
    void SetAlignmentData(const AlignmentData2& data);
@@ -18,5 +19,5 @@ public:
    RoadwaySectionData GetRoadwaySectionData() const;
 
 private:
-   CComPtr<IRoadwayData> m_pAlignment;
+   std::weak_ptr<IRoadwayData> m_pAlignment;
 }; 

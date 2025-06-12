@@ -1,63 +1,57 @@
 #include "stdafx.h"
 #include "PyLoadModifiers.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-void CPyLoadModifiers::Init(IBroker* pBroker)
+void CPyLoadModifiers::Init(std::weak_ptr<WBFL::EAF::Broker> pBroker)
 {
-   pBroker->GetInterface(IID_ILoadModifiers, (IUnknown**)&m_pLoadModifiers);
+   auto broker = pBroker.lock();
+   m_pLoadModifiers = broker->GetInterface<ILoadModifiers>(IID_ILoadModifiers);
 }
 
 void CPyLoadModifiers::Reset()
 {
-   m_pLoadModifiers.Release();
 }
 
 void CPyLoadModifiers::SetDuctilityModifier(ILoadModifiers::Level level, Float64 value)
 {
-   m_pLoadModifiers->SetDuctilityFactor(level, value);
+   m_pLoadModifiers.lock()->SetDuctilityFactor(level, value);
 }
 
 ILoadModifiers::Level CPyLoadModifiers::GetDuctilityLevel() const
 {
-   return m_pLoadModifiers->GetDuctilityLevel();
+   return m_pLoadModifiers.lock()->GetDuctilityLevel();
 }
 
 Float64 CPyLoadModifiers::GetDuctilityFactor() const
 {
-   return m_pLoadModifiers->GetDuctilityFactor();
+   return m_pLoadModifiers.lock()->GetDuctilityFactor();
 }
 
 void CPyLoadModifiers::SetImportanceModifier(ILoadModifiers::Level level, Float64 value)
 {
-   m_pLoadModifiers->SetImportanceFactor(level, value);
+   m_pLoadModifiers.lock()->SetImportanceFactor(level, value);
 }
 
 ILoadModifiers::Level CPyLoadModifiers::GetImportanceLevel() const
 {
-   return m_pLoadModifiers->GetImportanceLevel();
+   return m_pLoadModifiers.lock()->GetImportanceLevel();
 }
 
 Float64 CPyLoadModifiers::GetImportanceFactor() const
 {
-   return m_pLoadModifiers->GetImportanceFactor();
+   return m_pLoadModifiers.lock()->GetImportanceFactor();
 }
 
 void CPyLoadModifiers::SetRedundancyModifier(ILoadModifiers::Level level, Float64 value)
 {
-   m_pLoadModifiers->SetRedundancyFactor(level, value);
+   m_pLoadModifiers.lock()->SetRedundancyFactor(level, value);
 }
 
 ILoadModifiers::Level CPyLoadModifiers::GetRedundancyLevel() const
 {
-   return m_pLoadModifiers->GetRedundancyLevel();
+   return m_pLoadModifiers.lock()->GetRedundancyLevel();
 }
 
 Float64 CPyLoadModifiers::GetRedundancyFactor() const
 {
-   return m_pLoadModifiers->GetRedundancyFactor();
+   return m_pLoadModifiers.lock()->GetRedundancyFactor();
 }

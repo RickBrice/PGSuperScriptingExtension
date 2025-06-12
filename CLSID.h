@@ -20,44 +20,11 @@
 // Bridge_Support@wsdot.wa.gov
 ///////////////////////////////////////////////////////////////////////
 
-// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently,
-// but are changed infrequently
-
 #pragma once
 
-#include <PGSuperAll.h>
 
-#ifndef _AFX_NO_OLE_SUPPORT
-#include <afxole.h>         // MFC OLE classes
-#include <afxodlgs.h>       // MFC OLE dialog classes
-#include <afxdisp.h>        // MFC OLE automation classes
-#endif // _AFX_NO_OLE_SUPPORT
+#include <guiddef.h>
 
-
-#ifndef _AFX_NO_DB_SUPPORT
-#include <afxdb.h>			// MFC ODBC database classes
-#endif // _AFX_NO_DB_SUPPORT
-
-#ifndef _AFX_NO_DAO_SUPPORT
-#include <afxdao.h>			// MFC DAO database classes
-#endif // _AFX_NO_DAO_SUPPORT
-
-#ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>			// MFC support for Windows Common Controls
-#endif // _AFX_NO_AFXCMN_SUPPORT
-
-#include <atlbase.h>
-#include <atlcom.h>
-
-#include <afxdlgs.h>
-#include <afxwin.h>
-
-#if defined _DEBUG
-#define BOOST_DEBUG_PYTHON
-#define BOOST_LINKING_PYTHON
-#endif
-
-#include <boost\python.hpp>
-
-#include <Scintilla.h>
+// {9AD09682-03D8-42CF-B17A-6E679ABFD880}
+DEFINE_GUID(CLSID_PGSuperScriptingAgent,
+   0x9AD09682, 0x03D8, 0x42CF, 0xB1, 0x7a, 0x6e, 0x67, 0x9a, 0xbf, 0xd8, 0x80);

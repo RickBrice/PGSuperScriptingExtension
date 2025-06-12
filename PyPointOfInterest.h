@@ -1,16 +1,17 @@
 #pragma once
+#include <AgentTools.h>
 
 #include <IFace\PointOfInterest.h>
 
 class CPyPointOfInterest
 {
 public:
-   void Init(IBroker* pBroker);
+   void Init(std::weak_ptr<WBFL::EAF::Broker> pBroker);
    void Reset();
 
    std::vector<pgsPointOfInterest> GetPointsOfInterest(const CSegmentKey& segmentKey) const;
    std::vector<pgsPointOfInterest> GetSpanPointsOfInterest(const CSpanKey& spanKey) const;
 
 private:
-   CComPtr<IPointOfInterest> m_pPoi;
+   std::weak_ptr<IPointOfInterest> m_pPoi;
 }; 

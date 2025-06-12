@@ -1,11 +1,12 @@
 #pragma once
+#include <AgentTools.h>
 
 #include <IFace\Project.h>
 
 class CPyLossParameters
 {
 public:
-   void Init(IBroker* pBroker);
+   void Init(std::weak_ptr<WBFL::EAF::Broker> pBroker);
    void Reset();
 
    PrestressLossCriteria::LossMethodType GetLossMethod() const;
@@ -43,5 +44,5 @@ public:
    void SetFinalLosses(Float64 loss);
 
 private:
-   CComPtr<ILossParameters> m_pLossParameters;
+   std::weak_ptr<ILossParameters> m_pLossParameters;
 }; 

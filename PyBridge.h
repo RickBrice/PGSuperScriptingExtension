@@ -1,11 +1,12 @@
 #pragma once
+#include <AgentTools.h>
 
 #include <IFace\Bridge.h>
 
 class CPyBridge
 {
 public:
-   void Init(IBroker* pBroker);
+   void Init(std::weak_ptr<WBFL::EAF::Broker> pBroker);
    void Reset();
 
    bool HasAsymmetricGirders() const;
@@ -85,5 +86,5 @@ public:
 
 
 private:
-   CComPtr<IBridge> m_pBridge;
+   std::weak_ptr<IBridge> m_pBridge;
 }; 

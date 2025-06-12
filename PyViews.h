@@ -1,4 +1,5 @@
 #pragma once
+#include <AgentTools.h>
 
 #include <IFace\Views.h>
 
@@ -9,7 +10,7 @@
 class CPyViews
 {
 public:
-   void Init(IBroker* pBroker);
+   void Init(std::weak_ptr<WBFL::EAF::Broker> pBroker);
    void Reset();
 
    CPyBridgeModelView CreateBridgeModelView();
@@ -21,8 +22,9 @@ public:
    void CreateReport(IndexType idx,bool bPrompt);
 
 private:
-   IBroker* m_pBroker; // weak reference
-   CComPtr<IViews> m_pViews;
+   std::weak_ptr<WBFL::EAF::Broker> m_pBroker; // weak reference
+   inline std::shared_ptr<WBFL::EAF::Broker> GetBroker() { return m_pBroker.lock(); }
+   std::weak_ptr<IViews> m_pViews;
 
    CPyViewControllerBase* CreateGraphContollerWrapper(IEAFViewController* pController) const;
 };

@@ -1,53 +1,47 @@
 #include "stdafx.h"
 #include "PyLimits.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-void CPyLimits::Init(IBroker* pBroker)
+void CPyLimits::Init(std::weak_ptr<WBFL::EAF::Broker> pBroker)
 {
-   pBroker->GetInterface(IID_ILimits, (IUnknown**)&m_pLimits);
+   auto broker = pBroker.lock();
+   m_pLimits = broker->GetInterface<ILimits>(IID_ILimits);
 }
 
 void CPyLimits::Reset()
 {
-   m_pLimits.Release();
 }
 
 Float64 CPyLimits::GetMaxSlabFc(pgsTypes::ConcreteType concType) const
 {
-   return m_pLimits->GetMaxSlabFc(concType);
+   return m_pLimits.lock()->GetMaxSlabFc(concType);
 }
 
 Float64 CPyLimits::GetMaxSegmentFci(pgsTypes::ConcreteType concType) const
 {
-   return m_pLimits->GetMaxSegmentFci(concType);
+   return m_pLimits.lock()->GetMaxSegmentFci(concType);
 }
 
 Float64 CPyLimits::GetMaxSegmentFc(pgsTypes::ConcreteType concType) const
 {
-   return m_pLimits->GetMaxSegmentFc(concType);
+   return m_pLimits.lock()->GetMaxSegmentFc(concType);
 }
 
 Float64 CPyLimits::GetMaxClosureFci(pgsTypes::ConcreteType concType) const
 {
-   return m_pLimits->GetMaxClosureFci(concType);
+   return m_pLimits.lock()->GetMaxClosureFci(concType);
 }
 
 Float64 CPyLimits::GetMaxClosureFc(pgsTypes::ConcreteType concType) const
 {
-   return m_pLimits->GetMaxClosureFc(concType);
+   return m_pLimits.lock()->GetMaxClosureFc(concType);
 }
 
 Float64 CPyLimits::GetMaxConcreteUnitWeight(pgsTypes::ConcreteType concType) const
 {
-   return m_pLimits->GetMaxConcreteUnitWeight(concType);
+   return m_pLimits.lock()->GetMaxConcreteUnitWeight(concType);
 }
 
 Float64 CPyLimits::GetMaxConcreteAggSize(pgsTypes::ConcreteType concType) const
 {
-   return m_pLimits->GetMaxConcreteAggSize(concType);
+   return m_pLimits.lock()->GetMaxConcreteAggSize(concType);
 }

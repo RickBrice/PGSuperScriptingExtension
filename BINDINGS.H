@@ -20,7 +20,7 @@
 class CPyPGSuper
 {
 public:
-   void Init(IBroker* pBroker);
+   void Init(std::weak_ptr<WBFL::EAF::Broker> pBroker);
    void Reset();
 
    std::string GetVersionString() const;
@@ -44,7 +44,7 @@ public:
    CPyMomentCapacity MomentCapacity();
 
 private:
-   CComPtr<IVersionInfo> m_pVersionInfo;
+   std::weak_ptr<IVersionInfo> m_pVersionInfo;
 
    CPyProjectProperties m_Properties;
    CPyEnvironment m_Environment;

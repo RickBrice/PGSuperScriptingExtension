@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "PGSuperScriptingAgentImp.h"
+#include "CLSID.h"
 
 #include "PyEditorFrame.h"
 #include "PyEditorView.h"
@@ -15,12 +16,6 @@
 #include "PyScriptEngine.h"
 
 #include "GILManager.h"
-
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
 
 BEGIN_MESSAGE_MAP(CMyCmdTarget, CCmdTarget)
    ON_COMMAND(ID_MACROS, OnMacros)
@@ -104,14 +99,12 @@ void CMyCmdTarget::OnUpdateShowConsole(CCmdUI *pCmdUI)
 /////////////////////////////////////////////////////////////
 // CPGSuperScriptingAgent
 
-HRESULT CPGSuperScriptingAgent::FinalConstruct()
+CPGSuperScriptingAgent::CPGSuperScriptingAgent()
 {
    m_MyCommandTarget.Init(this);
 
    m_ScriptDocument.m_bAutoDelete = FALSE;
    m_pView = nullptr;
-
-	return S_OK;
 }
 
 void CPGSuperScriptingAgent::RegisterViews()
@@ -131,20 +124,21 @@ void CPGSuperScriptingAgent::CreateMenus()
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
    GET_IFACE(IEAFMainMenu,pMainMenu);
-   CEAFMenu* pMenu = pMainMenu->GetMainMenu();
+   auto pMenu = pMainMenu->GetMainMenu();
 
    INT nMenus = pMenu->GetMenuItemCount();
    if ( nMenus == 0 )
       return;
 
    m_pMyMenu = pMenu->CreatePopupMenu(nMenus-1,_T("Macros")); // put the menu before the last menu (Help)
-   m_pMyMenu->LoadMenu(IDR_MENU,this);
+   auto callback = std::dynamic_pointer_cast<WBFL::EAF::ICommandCallback>(shared_from_this());
+   m_pMyMenu->LoadMenu(IDR_MENU,callback);
 }
 
 void CPGSuperScriptingAgent::RemoveMenus()
 {
    GET_IFACE(IEAFMainMenu,pMainMenu);
-   CEAFMenu* pMenu = pMainMenu->GetMainMenu();
+   auto pMenu = pMainMenu->GetMainMenu();
    pMenu->DestroyMenu(m_pMyMenu);
 }
 
@@ -153,8 +147,9 @@ void CPGSuperScriptingAgent::CreateToolBar()
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
    GET_IFACE(IEAFToolbars,pToolBars);
    m_ToolBarID = pToolBars->CreateToolBar(_T("Scripting"));
-   CEAFToolBar* pToolBar = pToolBars->GetToolBar(m_ToolBarID);
-   pToolBar->LoadToolBar(IDR_TOOLBAR,this);
+   auto pToolBar = pToolBars->GetToolBar(m_ToolBarID);
+   auto callback = std::dynamic_pointer_cast<WBFL::EAF::ICommandCallback>(shared_from_this());
+   pToolBar->LoadToolBar(IDR_TOOLBAR,callback);
 
    //GET_IFACE(IEditByUI,pEditUI);
    //UINT stdID = pEditUI->GetStdToolBarID();
@@ -177,43 +172,37 @@ void CPGSuperScriptingAgent::RemoveToolBar()
 /////////////////////////////////////////////////////////////////////////
 // IAgentEx
 
-STDMETHODIMP CPGSuperScriptingAgent::SetBroker(IBroker *pBroker)
+bool CPGSuperScriptingAgent::RegisterInterfaces()
 {
-   EAF_AGENT_SET_BROKER(pBroker);
-   return S_OK;
+   EAF_AGENT_REGISTER_INTERFACES;
+   REGISTER_INTERFACE(IScripting);
+
+   return true;
 }
 
-STDMETHODIMP CPGSuperScriptingAgent::RegInterfaces()
-{
-   CComQIPtr<IBrokerInitEx2,&IID_IBrokerInitEx2> pBrokerInit(m_pBroker);
-   // Register interfaces here
-   pBrokerInit->RegInterface( IID_IScripting, this);
-
-   return S_OK;
-}
-
-STDMETHODIMP CPGSuperScriptingAgent::Init()
+bool CPGSuperScriptingAgent::Init()
 {
    EAF_AGENT_INIT;
 
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
    VERIFY(m_bmpMenu.LoadBitmap(IDB_LOGO));
 
-   return AGENT_S_SECONDPASSINIT;
-}
-
-STDMETHODIMP CPGSuperScriptingAgent::Init2()
-{
    // this is where the python wrappers need to init the broker and interfaces
-   AFX_MANAGE_STATE(AfxGetStaticModuleState());
    CExtensionApp* pApp = (CExtensionApp*)AfxGetApp();
    pApp->m_pyPGSuper.Init(m_pBroker);
 
-   return S_OK;
+   return true;
 }
 
-STDMETHODIMP CPGSuperScriptingAgent::Reset()
+CLSID CPGSuperScriptingAgent::GetCLSID() const
 {
+   return CLSID_PGSuperScriptingAgent;
+}
+
+bool CPGSuperScriptingAgent::Reset()
+{
+   EAF_AGENT_RESET;
+
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
    CExtensionApp* pApp = (CExtensionApp*)AfxGetApp();
    pApp->m_pyPGSuper.Reset();
@@ -222,59 +211,19 @@ STDMETHODIMP CPGSuperScriptingAgent::Reset()
 
    m_MyCommandTarget.Reset();
 
-   return S_OK;
+   return true;
 }
 
-STDMETHODIMP CPGSuperScriptingAgent::ShutDown()
+bool CPGSuperScriptingAgent::ShutDown()
 {
-   return S_OK;
+   EAF_AGENT_SHUTDOWN;
+   return true;
 }
-
-STDMETHODIMP CPGSuperScriptingAgent::GetClassID(CLSID* pCLSID)
-{
-   *pCLSID = CLSID_PGSuperScriptingAgent;
-   return S_OK;
-}
-
-
-////////////////////////////////////////////////////////////////////
-// IAgentPersist
-//STDMETHODIMP CPGSuperScriptingAgent::Load(IStructuredLoad* pStrLoad)
-//{
-//   USES_CONVERSION;
-//   CComVariant var;
-//   var.vt = VT_BSTR;
-//   
-//   HRESULT hr = pStrLoad->BeginUnit(_T("ExampleExtensionAgent"));
-//   if ( FAILED(hr) )
-//      return hr;
-//
-//   var.vt = VT_BSTR;
-//   hr = pStrLoad->get_Property(_T("SampleData"),&var);
-//   if ( FAILED(hr) )
-//      return hr;
-//
-//   m_Answer = OLE2T(var.bstrVal);
-//
-//   hr = pStrLoad->EndUnit();
-//   if ( FAILED(hr) )
-//      return hr;
-//
-//   return S_OK;
-//}
-//
-//STDMETHODIMP CPGSuperScriptingAgent::Save(IStructuredSave* pStrSave)
-//{
-//   pStrSave->BeginUnit(_T("ExampleExtensionAgent"),1.0);
-//   pStrSave->put_Property(_T("SampleData"),CComVariant(m_Answer));
-//   pStrSave->EndUnit();
-//   return S_OK;
-//}
 
 
 ////////////////////////////////////////////////////////////////////
 // IAgentUIIntegration
-STDMETHODIMP CPGSuperScriptingAgent::IntegrateWithUI(BOOL bIntegrate)
+bool CPGSuperScriptingAgent::IntegrateWithUI(bool bIntegrate)
 {
    if ( bIntegrate )
    {
@@ -297,7 +246,7 @@ STDMETHODIMP CPGSuperScriptingAgent::IntegrateWithUI(BOOL bIntegrate)
       UnregisterViews();
    }
 
-   return S_OK;
+   return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////

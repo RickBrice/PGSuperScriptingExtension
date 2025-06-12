@@ -1,16 +1,16 @@
 #pragma once
 
-#include <IGraphManager.h>
-
+#include <EAF/EAFGraphManager.h>
+#include <AgentTools.h>
 class CPyGraphManager
 {
 public:
-   void Init(IBroker* pBroker);
+   void Init(std::weak_ptr<WBFL::EAF::Broker> pBroker);
    void Reset();
 
    IndexType GetGraphBuilderCount();
    boost::python::list GetGraphNames();
 
 private:
-   CComPtr<IGraphManager> m_pGraphManager;
+   std::weak_ptr<IEAFGraphManager> m_pGraphManager;
 };

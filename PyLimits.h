@@ -1,11 +1,12 @@
 #pragma once
+#include <AgentTools.h>
 
 #include <IFace\Project.h>
 
 class CPyLimits
 {
 public:
-   void Init(IBroker* pBroker);
+   void Init(std::weak_ptr<WBFL::EAF::Broker> pBroker);
    void Reset();
 
    Float64 GetMaxSlabFc(pgsTypes::ConcreteType concType) const;
@@ -17,5 +18,5 @@ public:
    Float64 GetMaxConcreteAggSize(pgsTypes::ConcreteType concType) const;
 
 private:
-   CComPtr<ILimits> m_pLimits;
+   std::weak_ptr<ILimits> m_pLimits;
 }; 

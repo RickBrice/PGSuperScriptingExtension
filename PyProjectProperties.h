@@ -1,11 +1,12 @@
 #pragma once
+#include <AgentTools.h>
 
 #include <IFace\Project.h>
 
 class CPyProjectProperties
 {
 public:
-   void Init(IBroker* pBroker);
+   void Init(std::weak_ptr<WBFL::EAF::Broker> pBroker);
    void Reset();
 
    std::string GetBridgeName() const;
@@ -27,5 +28,5 @@ public:
    void SetComments(LPCSTR strComments);
 
 private:
-   CComPtr<IProjectProperties> m_pProjectProperties;
+   std::weak_ptr<IProjectProperties> m_pProjectProperties;
 }; 

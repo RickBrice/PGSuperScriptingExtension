@@ -171,15 +171,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="PGSuperScriptingExtension.rgs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="PGSuperScriptingAgent.rgs">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="PGSuperScriptingExtension.def">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="Scripting.Manifest.PGSuper" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dllmain.h">
@@ -330,6 +325,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PySegmentAnalysisResultsGraphViewController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CLSID.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

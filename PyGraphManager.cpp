@@ -1,32 +1,26 @@
 #include "stdafx.h"
 #include "PyGraphManager.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-void CPyGraphManager::Init(IBroker* pBroker)
+void CPyGraphManager::Init(std::weak_ptr<WBFL::EAF::Broker> pBroker)
 {
-   pBroker->GetInterface(IID_IGraphManager, (IUnknown**)&m_pGraphManager);
+   auto broker = pBroker.lock();
+   m_pGraphManager = broker->GetInterface<IEAFGraphManager>(IID_IEAFGraphManager);
 }
 
 void CPyGraphManager::Reset()
 {
-   m_pGraphManager.Release();
 }
 
 IndexType CPyGraphManager::GetGraphBuilderCount()
 {
-   return m_pGraphManager->GetGraphBuilderCount();
+   return m_pGraphManager.lock()->GetGraphBuilderCount();
 }
 
 boost::python::list CPyGraphManager::GetGraphNames()
 {
    USES_CONVERSION;
    boost::python::list list;
-   std::vector<std::_tstring> vNames = m_pGraphManager->GetGraphNames();
+   std::vector<std::_tstring> vNames = m_pGraphManager.lock()->GetGraphNames();
    for (const auto& name : vNames)
    {
 #if defined _UNICODE

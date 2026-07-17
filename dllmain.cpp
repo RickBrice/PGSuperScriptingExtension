@@ -10,7 +10,6 @@
 #include <initguid.h>
 #include "dllmain.h"
 #include "CLSID.h"
-#include <WBFLCore_i.c>
 #include "PGSuperScriptingAgentImp.h"
 #include "PGSuperCatCom.h"
 #include "PGSpliceCatCom.h"
